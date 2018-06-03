@@ -1,17 +1,6 @@
-FROM alpine:edge
-MAINTAINER cam.daniel@gmail.com
+FROM httpd:alpine
 
-# Basic dependencies
-RUN apk -U add --no-cache tzdata git curl wget perl perl-dev libressl libressl-dev make gcc libc-dev zlib-dev
+RUN apk -U add --no-cache tzdata git curl wget perl perl-dev libressl libressl-dev make gcc libc-dev zlib-dev \
+    && rm -rf /var/cache/apk/*
 
-# Extras
-RUN apk add --no-cache postgresql-dev unzip
-
-# Tidy up
-RUN rm /var/cache/apk/*
-
-RUN curl -L https://cpanmin.us/ -o /usr/local/bin/cpanm && \
-    chmod +x /usr/local/bin/cpanm
-RUN cpanm -i Carton
-
-CMD ash
+RUN curl -o- -L --compressed https://git.io/cpm | perl - install App::cpm -g && rm -rf ~/.perl-cpm
